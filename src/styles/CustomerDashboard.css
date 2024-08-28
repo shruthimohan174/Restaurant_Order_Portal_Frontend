@@ -1,0 +1,22 @@
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.welcome-heading {
+  margin-bottom: 560px;
+  font-size: 46px;
+  color: #333;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .welcome-heading {
+    font-size: 12px;
+  }
+}
