@@ -46,30 +46,43 @@ const Register = () => {
       newErrors.lastName = "Last name can only contain alphabets";
     }
   
-    // Existing email validation
-    if (!formData.email) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email format";
+    // Validate email
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/^[a-zA-Z][a-zA-Z0-9._%+-]*@(gmail\.com|nucleusteq\.com)$/.test(formData.email)) {
+      newErrors.email = "Email must be a valid @gmail.com or @nucleusteq.com and contain at least one alphabet before the '@' symbol.";
+    }
   
-    // Existing password validation
-    if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 5) newErrors.password = "Password must be at least 5 characters long";
-    else if (!/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])/.test(formData.password)) 
-      newErrors.password = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character";
+    // Validate password
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 5) {
+      newErrors.password = "Password must be at least 5 characters long";
+    } else if (!/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])/.test(formData.password)) {
+      newErrors.password = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character.";
+    }
   
-    if (formData.password !== formData.confirmPassword) 
+    // Validate confirm password
+    if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
+    }
   
-    // Existing phone number validation
-    if (!formData.phoneNumber) newErrors.phoneNumber = "Phone number is required";
-    else if (formData.phoneNumber.length !== 10) newErrors.phoneNumber = "Phone number must be exactly 10 digits long";
-    else if (!/^\d+$/.test(formData.phoneNumber)) newErrors.phoneNumber = "Phone number must contain only numbers";
+    // Validate phone number
+    if (!formData.phoneNumber) {
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (!/^[789]\d{9}$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = "Phone number must start with 7, 8, or 9 and contain exactly 10 digits.";
+    }
   
-    // Existing terms and conditions validation
-    if (!formData.terms) newErrors.terms = "You must agree to the terms and conditions";
+    // Validate terms and conditions
+    if (!formData.terms) {
+      newErrors.terms = "You must agree to the terms and conditions";
+    }
   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
   
 
   const handleSubmit = async (e) => {
@@ -116,7 +129,7 @@ const Register = () => {
         />
         {errors.lastName && <div className="error">{errors.lastName}</div>}
         <input
-          type="email"
+          // type="email"
           name="email"
           placeholder="Email address"
           value={formData.email}
