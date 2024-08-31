@@ -65,12 +65,8 @@
 
 .error {
   color: red;
-  font-size: 12px;
-  margin: 5px 0;
-  padding: 8px; /* Reduced padding */
-  border: 1px solid red;
-  border-radius: 5px;
-  background-color: #fdd;
+  font-size: 15px; /* Adjust as needed */
+  margin: 0px 0; /* Margin to separate from other elements */
 }
 
 .modal {

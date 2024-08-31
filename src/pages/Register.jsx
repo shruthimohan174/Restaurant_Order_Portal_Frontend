@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import base64 from 'base-64'; // Ensure you have this installed
 import '../styles/Register.css';
 
 const Register = () => {
@@ -32,28 +33,24 @@ const Register = () => {
   const validate = () => {
     const newErrors = {};
   
-    // Validate first name
     if (!formData.firstName) {
       newErrors.firstName = "First name is required";
     } else if (!/^[A-Za-z]+$/.test(formData.firstName)) {
       newErrors.firstName = "First name can only contain alphabets";
     }
   
-    // Validate last name
     if (!formData.lastName) {
       newErrors.lastName = "Last name is required";
     } else if (!/^[A-Za-z]+$/.test(formData.lastName)) {
       newErrors.lastName = "Last name can only contain alphabets";
     }
   
-    // Validate email
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/^[a-zA-Z][a-zA-Z0-9._%+-]*@(gmail\.com|nucleusteq\.com)$/.test(formData.email)) {
       newErrors.email = "Email must be a valid @gmail.com or @nucleusteq.com and contain at least one alphabet before the '@' symbol.";
     }
   
-    // Validate password
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 5) {
@@ -62,19 +59,18 @@ const Register = () => {
       newErrors.password = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character.";
     }
   
-    // Validate confirm password
-    if (formData.password !== formData.confirmPassword) {
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password is required";
+    } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
   
-    // Validate phone number
     if (!formData.phoneNumber) {
       newErrors.phoneNumber = "Phone number is required";
     } else if (!/^[789]\d{9}$/.test(formData.phoneNumber)) {
       newErrors.phoneNumber = "Phone number must start with 7, 8, or 9 and contain exactly 10 digits.";
     }
   
-    // Validate terms and conditions
     if (!formData.terms) {
       newErrors.terms = "You must agree to the terms and conditions";
     }
@@ -82,19 +78,26 @@ const Register = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-
+  
     try {
-      await axios.post('http://localhost:8080/user/register', formData);
+      const { confirmPassword, password, ...dataToSend } = formData;
+      const encodedPassword = base64.encode(password);
+      const dataWithEncodedPassword = { ...dataToSend, password: encodedPassword };
+  
+      const response = await axios.post('http://localhost:8080/user/register', dataWithEncodedPassword);
+  
+      if (response.data.id) {
+        delete response.data.id;  
+      }
+  
       setShowModal(true);
       toast.success('Registration successful!');
-      console.log('User registered successfully');
-
+      console.log('User registered successfully:', response.data);
+  
       setTimeout(() => {
         setShowModal(false);
         navigate('/login');
@@ -105,7 +108,7 @@ const Register = () => {
       console.error('Error registering user:', errorMessage);
     }
   };
-
+  
   return (
     <div className="register-container">
       <form className="register-form" onSubmit={handleSubmit}>
@@ -129,7 +132,7 @@ const Register = () => {
         />
         {errors.lastName && <div className="error">{errors.lastName}</div>}
         <input
-          // type="email"
+          type="email"
           name="email"
           placeholder="Email address"
           value={formData.email}

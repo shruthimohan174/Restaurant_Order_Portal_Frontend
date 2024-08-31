@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUser } from '../context/UserContext'; 
 import '../styles/Login.css'; 
-
+import base64 from 'base-64'; 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -33,7 +33,10 @@ const Login = () => {
     if (!validate()) return;
 
     try {
-      const response = await axios.post('http://localhost:8080/user/login', formData);
+      const encodedPassword = base64.encode(formData.password); 
+      const dataToSend = { ...formData, password: encodedPassword }; 
+
+      const response = await axios.post('http://localhost:8080/user/login', dataToSend);
       const user = response.data;
       login(user);  
       console.log(user);
@@ -51,7 +54,6 @@ const Login = () => {
         <h1 className="titleL">Login</h1>
         <input
           className="input"
-          type="email"
           name="email"
           placeholder="Email address"
           value={formData.email}

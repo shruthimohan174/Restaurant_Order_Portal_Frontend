@@ -6,14 +6,13 @@
 }
 
 .profile-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 30px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  position: relative;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin-left:263px;
 }
+
 
 .profile-header {
   display: flex;
@@ -24,7 +23,7 @@
 
 .user-icon {
   font-size: 40px;
-  color: #007bff;
+  color: #4f555b;
   margin-right: 20px;
 }
 
@@ -52,11 +51,11 @@
   margin-top: 40px;
 }
 
-.button-group {
+.button-groupP .edit-button{
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: -200pxx;
 }
 
 /* Modal Styles */
@@ -92,6 +91,12 @@
   max-width: 90%;
 }
 
+.form h2 {
+  margin-bottom: 15px;
+  font-size: 27px;
+  color: black;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -103,6 +108,9 @@
   flex-direction: column;
   gap: 5px;
 }
+/* .form-field label {
+} */
+
 
 .error-message {
   color: red;
@@ -118,8 +126,7 @@
 
 /* Button Styles */
 .submit-button,
-.cancel-button,
-.edit-button {
+.cancel-button{
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
