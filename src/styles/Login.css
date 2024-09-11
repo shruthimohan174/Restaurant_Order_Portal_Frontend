@@ -1,0 +1,90 @@
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    height: 100vh;            
+    background-color: #f5f5f5;
+    padding: 0 20px;          
+  }
+  
+  .login-form {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom:80px;
+
+  }
+  
+  .titleL {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+  }
+  
+  .input {
+    width: calc(100% - 24px); 
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .login-button {
+    width: calc(100% - 24px); 
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #e21d1d;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 12px;
+    margin-left:23px;
+  }
+  
+  .login-button:hover {
+    background-color: darkred;
+  }
+  
+  .create-account {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .create-account a {
+    color: red;
+    text-decoration: none;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 600px) {
+    .login-form {
+      padding: 20px;
+    }
+    
+    .title {
+      font-size: 24px;
+    }
+    
+    .input, .login-button {
+      width: 100%;
+      margin: 10px 0;
+    }
+  }
+  
