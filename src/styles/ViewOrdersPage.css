@@ -1,0 +1,36 @@
+/* Sidebar.css */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #333;
+    color: white;
+    transition: margin-left 0.3s;
+    z-index: 1000; /* Ensure it stays on top */
+    overflow-y: auto;
+  }
+  
+  .sidebar.open {
+    margin-left: 0;
+  }
+  
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+  }
+  
+  .sidebar-item span {
+    margin-left: 10px;
+  }
+  
+  .sidebar-item:hover {
+    background-color: #444;
+  }
+/*   
+  .container mx-auto px-4 py-8{
+    margin-left:300px;
+  } */
