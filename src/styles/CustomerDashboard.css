@@ -1,0 +1,63 @@
+/* styles/CustomerDashboard.css */
+
+.dashboard-container {
+  display: flex;
+  height: calc(100vh - 60px); /* Adjust based on your navbar height */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  left: 0; /* Sidebar is always visible */
+  top: 60px; /* Adjust based on your navbar height */
+  bottom: 0;
+  /* Remove transition */
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sidebar-item:hover {
+  background-color: #e9ecef;
+}
+
+.sidebar-item svg {
+  margin-right: 10px;
+}
+
+.dashboard-content {
+  flex-grow: 1;
+  padding: 20px;
+  margin-left: 250px; /* Space for the sidebar */
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-toggle {
+  font-size: 24px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.welcome-heading {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
