@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../styles/RestaurantPage.css';
 
 function RestaurantPage() {
   const { restaurantId } = useParams();
@@ -45,22 +46,23 @@ function RestaurantPage() {
 
   const handleAddToCart = (foodItem) => {
     if (user && user.id) {
-      axios.post('http://localhost:8081/cart/add', {
+      axios.post('http://localhost:8081/cart', {
         userId: user.id,
         foodItemId: foodItem.id,
         restaurantId: restaurantId,
         price: foodItem.price
       })
         .then(response => {
-          toast.success("Item added to cart.");
+          toast.success(response.data.message);
         })
         .catch(error => {
           console.error("Error adding item to cart:", error);
-          toast.error("Error adding item to cart.");
+          toast.error(error.response.data.message);
         });
     } else {
       console.error("User ID is not available.");
       toast.error("Please log in to add items to the cart.");
+      navigate('/login');  
     }
   };
 
@@ -104,7 +106,9 @@ function RestaurantPage() {
                     <p><strong>{foodItem.itemName}</strong></p>
                     <p>{foodItem.description}</p>
                     <p><strong>Price:</strong> Rs.{foodItem.price}</p>
-                    <button onClick={() => handleAddToCart(foodItem)}>Add to Cart</button>
+                    <div className="button-cart">
+                    <button className='buttonC' onClick={() => handleAddToCart(foodItem)}>Add to Cart</button>
+                    </div>
                   </div>
                 </li>
               ))
@@ -114,6 +118,7 @@ function RestaurantPage() {
           </ul>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 }

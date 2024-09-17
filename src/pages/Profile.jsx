@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUser } from '../context/UserContext';
-import { FaUser, FaEdit } from 'react-icons/fa';
+import { FaUser, FaEdit, FaPlus } from 'react-icons/fa';
 import '../styles/Profile.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +13,7 @@ const Profile = () => {
   const { user } = useUser();
   const [profile, setProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isAddingMoney, setIsAddingMoney] = useState(false); 
   const [sidebarOpen, setSidebarOpen] = useState(false); 
 
   useEffect(() => {
@@ -30,17 +31,16 @@ const Profile = () => {
     }
   }, [user]);
 
-  // useEffect(() => {
-  //   console.log('isEditing:', isEditing);
-  // }, [isEditing]);
-
   const handleEditClick = () => {
-    // console.log('Edit button clicked');
     setIsEditing(true);
   };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleAddMoneyClick = () => {
+    setIsAddingMoney(true);
   };
 
   if (!profile) {
@@ -70,21 +70,90 @@ const Profile = () => {
           <button className="edit-button" onClick={handleEditClick}>
             <FaEdit /> Edit Profile
           </button>
+          {user.userRole === 'CUSTOMER' && (
+            <button className="add-money-button" onClick={handleAddMoneyClick}>
+              <FaPlus /> Add Money
+            </button>
+          )}
         </div>
       </div>
-      {isEditing && (
-        // console.log('Rendering modal'),
-        <div className="modalP">
-          <div className="modal-contentP">
-            <EditProfileForm 
-              profile={profile} 
-              setIsEditing={setIsEditing} 
-              setProfile={setProfile} 
-            />
+      <>
+        {isEditing && (
+          <div className="modalP">
+            <div className="modal-contentP">
+              <EditProfileForm 
+                profile={profile} 
+                setIsEditing={setIsEditing} 
+                setProfile={setProfile} 
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        {isAddingMoney && (
+          <div className="modalP">
+            <div className="modal-contentP">
+              <AddMoneyForm
+                userId={user.id}
+                setIsAddingMoney={setIsAddingMoney}
+                setProfile={setProfile}
+              />
+            </div>
+          </div>
+        )}
+      </>
       <ToastContainer />
+    </div>
+  );
+};
+
+const AddMoneyForm = ({ userId, setIsAddingMoney, setProfile }) => {
+  const [amount, setAmount] = useState('');
+
+  const handleChange = (e) => {
+    setAmount(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`http://localhost:8080/user/${userId}/addWallet`, amount, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setProfile(prevProfile => ({
+        ...prevProfile,
+        walletBalance: prevProfile.walletBalance + parseFloat(amount)
+      }));
+      setIsAddingMoney(false);
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error('Error adding money to wallet:', error);
+      toast.error(error.response?.data?.message || 'Failed to add money to wallet. Please try again.');
+    }
+  };
+
+  return (
+    <div className="add-money-container">
+      <form className="form" onSubmit={handleSubmit}>
+        <h2>Add Money to Wallet</h2>
+        <div className="form-field">
+          <label htmlFor="amount">Amount:</label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            value={amount}
+            onChange={handleChange}
+            min="1"
+            required
+          />
+        </div>
+        <div className="button-groupP">
+          <button className="submit-buttonP" type="submit">Add Money</button>
+          <button className="cancel-buttonP" type="button" onClick={() => setIsAddingMoney(false)}>Cancel</button>
+        </div>
+      </form>
     </div>
   );
 };
@@ -137,10 +206,10 @@ const EditProfileForm = ({ profile, setIsEditing, setProfile }) => {
       const response = await axios.put(`http://localhost:8080/user/update/${profile.id}`, dataToSend);
       setProfile({ ...profile, ...response.data });
       setIsEditing(false);
-      toast.success('Profile updated successfully!');
+      toast.success(response.data.message );
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile. Please try again.');
+      toast.error(error.response?.data?.message || 'Failed to update profile. Please try again.');
     }
   };
 
@@ -196,8 +265,8 @@ const EditProfileForm = ({ profile, setIsEditing, setProfile }) => {
           {errors.password && <div className="error-message">{errors.password}</div>}
         </div>
         <div className="button-groupP">
-          <button className="submit-button" type="submit">Save Changes</button>
-          <button className="cancel-button" type="button" onClick={() => setIsEditing(false)}>Cancel</button>
+          <button className="submit-buttonP" type="submit">Update</button>
+          <button className="cancel-buttonP" type="button" onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
       </form>
     </div>

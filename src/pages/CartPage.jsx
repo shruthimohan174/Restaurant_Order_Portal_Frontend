@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/CartPage.css';
+
 
 function CartPage() {
   const { restaurantId } = useParams();
@@ -11,6 +15,7 @@ function CartPage() {
   const [addresses, setAddresses] = useState([]);
   const [foodItems, setFoodItems] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(0); 
 
   useEffect(() => {
     if (user && user.id) {
@@ -23,7 +28,8 @@ function CartPage() {
     axios.get(`http://localhost:8081/cart/user/${user.id}/restaurant/${restaurantId}`)
       .then(response => {
         setCart(response.data);
-        fetchFoodItems(response.data.map(item => item.foodItemId)); // Fetch food item details
+        fetchFoodItems(response.data.map(item => item.foodItemId)); 
+        calculateTotalPrice(response.data); 
       })
       .catch(error => {
         console.error("Error fetching cart:", error);
@@ -33,15 +39,12 @@ function CartPage() {
   const fetchFoodItems = (foodItemIds) => {
     if (foodItemIds.length === 0) return;
 
-    // Create an array of requests
     const requests = foodItemIds.map(id => 
       axios.get(`http://localhost:8082/foodItem/${id}`)
     );
 
-    // Use Promise.all to wait for all requests to complete
     Promise.all(requests)
       .then(responses => {
-        // Extract data from responses
         const items = responses.map(response => response.data);
         setFoodItems(items);
       })
@@ -74,6 +77,8 @@ function CartPage() {
     axios.delete(`http://localhost:8081/cart/remove/${cartId}`)
       .then(response => {
         setCart(cart.filter(item => item.id !== cartId));
+        calculateTotalPrice(cart.filter(item => item.id !== cartId)); 
+        toast.success(response.data.message);
       })
       .catch(error => {
         console.error("Error removing item from cart:", error);
@@ -82,12 +87,12 @@ function CartPage() {
 
   const handlePlaceOrder = () => {
     if (cart.length === 0) {
-      alert("Please add items to the cart first.");
+      toast.error("Please add items to the cart first.");
       return;
     }
 
     if (!selectedAddressId) {
-      alert("Please select a delivery address.");
+      toast.error("Please select a delivery address.");
       return;
     }
 
@@ -102,29 +107,37 @@ function CartPage() {
       }))
     };
 
-    axios.post('http://localhost:8081/orders/place', order)
+    axios.post('http://localhost:8081/orders', order)
       .then(response => {
-        alert("Order placed successfully!");
-        navigate('/order-history');
+        toast.success(response.data.message);
+        setTimeout(()=>{
+          navigate('/order-history');
+        },4000)
+        
       })
       .catch(error => {
         if (error.response && error.response.status === 400 && error.response.data.message === 'Insufficient balance in wallet to place the order.') {
-          alert("You have insufficient balance to place this order. Please add funds to your wallet.");
+          toast.error(error.response.data.message); 
         } else {
           console.error("Error placing order:", error);
-          alert("There was an error placing your order. Please try again.");
+          toast.error(error.response.data.message); 
         }
       });
   };
 
-  // Helper function to get food item name
   const getFoodItemName = (foodItemId) => {
     const foodItem = foodItems.find(item => item.id === foodItemId);
     return foodItem ? foodItem.itemName : "Unknown Item";
   };
 
+  const calculateTotalPrice = (cartItems) => {
+    const total = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    setTotalPrice(total);
+  };
+
   return (
     <div style={{ padding: '20px' }}>
+      <ToastContainer />
       <h2>Cart</h2>
       {cart.length === 0 ? (
         <p>Your cart is empty. Please add items to the cart.</p>
@@ -135,18 +148,19 @@ function CartPage() {
               <img src={`http://localhost:8082/foodItem/${item.foodItemId}/image`} alt={getFoodItemName(item.foodItemId)} style={{ width: '100px', marginRight: '10px' }} />
               <div>
                 <p>{getFoodItemName(item.foodItemId)}</p>
-                <p>Price: Rs.{item.price}</p>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <button onClick={() => handleQuantityChange(item.id, -1)}>-</button>
                   <span style={{ margin: '0 10px' }}>{item.quantity}</span>
                   <button onClick={() => handleQuantityChange(item.id, 1)}>+</button>
                   <button onClick={() => handleRemoveFromCart(item.id)} style={{ marginLeft: '10px' }}>Remove</button>
                 </div>
+                <p className="total-price"> Total Price: Rs.{item.price}</p>
               </div>
             </li>
           ))}
         </ul>
       )}
+      
 
       <h3>Select Delivery Address</h3>
       <select value={selectedAddressId} onChange={(e) => setSelectedAddressId(e.target.value)}>
@@ -158,7 +172,7 @@ function CartPage() {
         ))}
       </select>
 
-      <button onClick={handlePlaceOrder} style={{ marginTop: '20px' }}>Place Order</button>
+      <button className='place' onClick={handlePlaceOrder} style={{ marginTop: '20px' }}>Place Order</button>
     </div>
   );
 }

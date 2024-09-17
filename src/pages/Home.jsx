@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Home.css';
 import homeImg from '../assets/homeImg.jpeg';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 
 const HomeSection = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const restaurantsPerPage = 3;
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
+  const restaurantSectionRef = useRef(null); 
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -30,7 +31,11 @@ const HomeSection = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleRestaurantClick = (restaurantId) => {
-    navigate(`/restaurant/${restaurantId}`); // Navigate to the restaurant page
+    navigate(`/restaurant/${restaurantId}`);
+  };
+
+  const handleOrderNowClick = () => {
+    restaurantSectionRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const renderRestaurantCards = () => {
@@ -38,8 +43,8 @@ const HomeSection = () => {
       <div 
         className="restaurant-card" 
         key={restaurant.id} 
-        onClick={() => handleRestaurantClick(restaurant.id)} // Add click handler
-        style={{ cursor: 'pointer' }} // Change cursor to pointer on hover
+        onClick={() => handleRestaurantClick(restaurant.id)}
+        style={{ cursor: 'pointer' }}
       >
         <img
           src={`http://localhost:8082/restaurant/${restaurant.id}/image`}
@@ -68,17 +73,16 @@ const HomeSection = () => {
           <p className="subtitle">Are you hungry?</p>
           <h2 className="title">Don't wait!</h2>
           <p className="description">Order your favorite food from the best restaurants near you</p>
-          <button>Order Now</button>
+          <button onClick={handleOrderNowClick}>Order Now</button> 
         </div>
         <img className="hero-image" src={homeImg} alt="New Collection" />
       </section>
 
-      <section className="restaurant-section">
+      <section className="restaurant-section" ref={restaurantSectionRef}> 
         <h2 className="section-title">Orders From Our Handpicked Favorites</h2>
         <div className="restaurant-list">
           {renderRestaurantCards()}
         </div>
-        {/* Pagination can be enabled if required */}
       </section>
     </div>
   );

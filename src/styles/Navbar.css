@@ -113,7 +113,6 @@
     font-size: 30px;
   }
   
-  /* Media Queries */
   @media (max-width: 1024px) {
     .header-container {
       padding: 10px 30px;

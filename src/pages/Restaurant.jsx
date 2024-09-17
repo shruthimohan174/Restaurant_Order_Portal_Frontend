@@ -22,14 +22,14 @@ const Restaurant = () => {
 
   useEffect(() => {
     fetchRestaurants();
-  }, []);
+  });
 
   const fetchRestaurants = async () => {
     try {
       const response = await axios.get(`http://localhost:8082/restaurant/user/${user.id}`);
       setRestaurants(response.data);
     } catch (error) {
-      toast.error('Failed to fetch restaurants');
+      toast.error(error.response.data.message); 
     }
   };
 
@@ -45,17 +45,13 @@ const Restaurant = () => {
   const validateForm = () => {
     const { restaurantName, address, contactNumber, openingHours } = newRestaurant;
     const phoneRegex = /^[789]\d{9}$/;
-    const nameRegex = /^[A-Za-z\s]+$/; // Regex to allow only alphabets and spaces
     let isValid = true;
     let newErrors = {};
   
     if (!restaurantName.trim()) {
       newErrors.restaurantName = 'Restaurant name cannot be blank.';
       isValid = false;
-    } else if (!nameRegex.test(restaurantName)) {
-      newErrors.restaurantName = 'Restaurant name can only contain alphabets.';
-      isValid = false;
-    }
+    } 
   
     if (!address.trim()) {
       newErrors.address = 'Address cannot be blank.';
@@ -94,10 +90,10 @@ const Restaurant = () => {
     formData.append('image', image);
   
     try {
-      await axios.post('http://localhost:8082/restaurant/add', formData, {
+     const response= await axios.post('http://localhost:8082/restaurant', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      toast.success('New restaurant added successfully!');
+      toast.success(response.data.message );
       fetchRestaurants();
       setNewRestaurant({
         restaurantName: '',
@@ -109,7 +105,7 @@ const Restaurant = () => {
       setErrors({});
       closeModal();
     } catch (error) {
-      toast.error('Failed to add restaurant');
+      toast.error(error.response.data.message); 
     }
   };
   
@@ -129,6 +125,7 @@ const Restaurant = () => {
     <div className={`app-containerR ${sidebarOpen ? 'shifted' : ''}`}>
       <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       <div className="restaurant-content">
+        
         <h2>Your Restaurants
           <button onClick={openModal} className="add-restaurant-btn">
             Add Restaurant
@@ -153,7 +150,6 @@ const Restaurant = () => {
           ))}
         </div>
 
-        {/* Modal for adding restaurant */}
         <div className={`modal ${modalOpen ? 'show' : ''}`} style={{ display: modalOpen ? 'block' : 'none' }}>
           <div className="modal-contentR">
             <span className="close-btn" onClick={closeModal}>&times;</span>

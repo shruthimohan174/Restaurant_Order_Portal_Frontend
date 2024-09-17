@@ -4,6 +4,8 @@ import { useUser } from '../context/UserContext';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import '../styles/AddressBook.css';
 import Sidebar from '../components/CustomerSidebar'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddressBook = () => {
   const { user } = useUser();
@@ -39,13 +41,15 @@ const AddressBook = () => {
   const handleAddAddress = async () => {
     try {
       const addressToAdd = { ...newAddress, userId: user.id };
-      await axios.post('http://localhost:8080/address/add', addressToAdd);
+      const response=await axios.post('http://localhost:8080/address', addressToAdd);
       setIsAddingAddress(false);
       setNewAddress({ street: '', city: '', state: '', pincode: '', userId: user.id });
       await fetchAddresses();
-      setMessage('Address added successfully!');
+      toast.success(response.data.message);
+
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
+      toast.error(error.response.data.message); 
       console.error('Error adding address:', error);
       setMessage('Error adding address. Please try again.');
       setTimeout(() => setMessage(''), 3000);
@@ -54,19 +58,24 @@ const AddressBook = () => {
 
   const handleUpdateAddress = async () => {
     try {
-      await axios.put(`http://localhost:8080/address/update/${editingAddress.id}`, editingAddress);
+      const response= await axios.put(`http://localhost:8080/address/update/${editingAddress.id}`, editingAddress);
       setEditingAddress(null);
       fetchAddresses();
+      toast.success(response.data.message);
     } catch (error) {
+      toast.error(error.response.data.message); 
       console.error('Error updating address:', error);
     }
   };
 
   const handleDeleteAddress = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/address/delete/${id}`);
+      const response=  await axios.delete(`http://localhost:8080/address/delete/${id}`)
+      toast.success(response.data.message);
+
       fetchAddresses();
     } catch (error) {
+      toast.error(error.response.data.message); 
       console.error('Error deleting address:', error);
     }
   };
@@ -167,6 +176,7 @@ const AddressBook = () => {
           <p>No addresses found.</p>
         )}
       </div>
+      <ToastContainer/>
     </div>
   );
 };

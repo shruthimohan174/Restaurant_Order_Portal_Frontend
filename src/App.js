@@ -16,6 +16,7 @@ import RestaurantPage from './pages/RestaurantPage';
 import CartPage from './pages/CartPage'; // Import CartPage
 import OrderHistoryPage from './pages/OrderHistoryPage'; // Add this line
 import ViewOrdersPage from './pages/ViewOrdersPage';
+import ContactUsForm from './components/ContactUsForm';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -52,6 +53,8 @@ function App() {
             <Route path="/cart/:restaurantId" element={<CartPage />} />
             <Route path="/order-history" element={<OrderHistoryPage />} />
             <Route path="/orders/:restaurantId" element={<ViewOrdersPage />} />
+            <Route path="/contact-us" element={<ContactUsForm />} />
+
             </Routes>
         </div>
       </Router>

@@ -24,7 +24,6 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    // localStorage.removeItem('restaurantId')
     window.history.pushState(null, document.title, window.location.href);
     window.location.replace('/login');
   };

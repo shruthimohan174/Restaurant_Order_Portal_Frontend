@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUser } from '../context/UserContext';
-import RestaurantSidebar from '../components/RestaurantSidebar'; // Import the Sidebar component
+import RestaurantSidebar from '../components/RestaurantSidebar';
+import '../styles/ViewOrdersPage.css';
 
 function ViewOrdersPage() {
   const { user } = useUser();
@@ -10,7 +11,7 @@ function ViewOrdersPage() {
   const [foodItems, setFoodItems] = useState({});
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -33,7 +34,6 @@ function ViewOrdersPage() {
     try {
       const response = await axios.get(`http://localhost:8081/orders/restaurant/${restaurantId}`);
       setOrders(response.data);
-      // Fetch food items for all orders
       response.data.forEach(order => {
         if (order.cartItems && order.cartItems.length > 0) {
           order.cartItems.forEach(item => {
@@ -63,7 +63,7 @@ function ViewOrdersPage() {
   const handleCompleteOrder = async (orderId) => {
     try {
       await axios.post(`http://localhost:8081/orders/complete/${orderId}/user/${user.id}`);
-      fetchOrders(selectedRestaurant); // Refresh the orders list
+      fetchOrders(selectedRestaurant); 
     } catch (error) {
       console.error("Error completing order:", error);
     }
@@ -95,14 +95,14 @@ function ViewOrdersPage() {
           </div>
           {selectedRestaurant && (
             <div>
-              <h2 className="text-xl font-semibold mb-4">Orders for Restaurant #{selectedRestaurant}</h2>
+              <h2 className="text-xl font-semibold mb-4">Orders for Restaurant</h2>
               {orders.length === 0 ? (
                 <p>No orders found for this restaurant.</p>
               ) : (
                 <div className="grid gap-6">
                   {orders.map((order) => (
                     <div key={order.id} className="bg-white shadow-md rounded-lg p-6">
-                      <h3 className="text-lg font-semibold mb-2">Order #{order.id}</h3>
+                      <h3 className="text-lg font-semibold mb-2">Order: {order.id}</h3>
                       <p className="mb-2"><strong>Status:</strong> {order.orderStatus}</p>
                       <p className="mb-2"><strong>Total Price:</strong> Rs.{order.totalPrice}</p>
                       <p className="mb-2"><strong>Order Time:</strong> {new Date(order.orderTime).toLocaleString()}</p>
@@ -127,10 +127,10 @@ function ViewOrdersPage() {
                           </li>
                         ))}
                       </ul>
-                      {order.orderStatus !== 'COMPLETED' && (
-                        <button
+                      {order.orderStatus !== 'COMPLETED' && order.orderStatus !== 'CANCELLED' && (
+                        <button   className='completed'
                           onClick={() => handleCompleteOrder(order.id)}
-                          className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                        
                         >
                           Mark as Completed
                         </button>

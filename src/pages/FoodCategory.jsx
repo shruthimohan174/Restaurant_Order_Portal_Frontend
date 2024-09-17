@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import axios from 'axios';
 import { FaPlus, FaEdit } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,6 +12,7 @@ function FoodCategory() {
   const [categories, setCategories] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [newCategory, setNewCategory] = useState({ restaurantId: '', categoryName: '' });
+  const [selectedRestaurantId, setSelectedRestaurantId] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
@@ -19,20 +20,20 @@ function FoodCategory() {
   const [validationError, setValidationError] = useState('');
 
   useEffect(() => {
-    if (restaurantId) {
-      setNewCategory(prev => ({ ...prev, restaurantId }));
-      fetchCategories(restaurantId);
-    }
-  }, [restaurantId]);
+    fetchRestaurants();
+  }, []);
 
   useEffect(() => {
-    fetchCategories(restaurantId);
-    fetchRestaurants();
-  }, [restaurantId]);
+    if (selectedRestaurantId) {
+      fetchCategories(selectedRestaurantId);
+    } else {
+      setCategories([]);
+    }
+  }, [selectedRestaurantId]);
 
   const fetchCategories = async (restaurantId) => {
     try {
-      const response = await axios.get(`http://localhost:8082/category`);
+      const response = await axios.get(`http://localhost:8082/category/restaurant/${restaurantId}`);
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories', error);
@@ -59,6 +60,10 @@ function FoodCategory() {
     setNewCategory({ ...newCategory, restaurantId: e.target.value });
   };
 
+  const handleRestaurantChange = (e) => {
+    setSelectedRestaurantId(e.target.value);
+  };
+
   const validateCategory = (category) => {
     if (!category.restaurantId) {
       return "Restaurant ID is required";
@@ -83,13 +88,12 @@ function FoodCategory() {
 
     setValidationError('');
     try {
-      await axios.post('http://localhost:8082/category/add', newCategory);
+      const response = await axios.post('http://localhost:8082/category', newCategory);
       fetchCategories(newCategory.restaurantId);
       setShowAddForm(false);
-      toast.success('Category added successfully!');
+      toast.success(response.data.message);
     } catch (error) {
-      console.error('Error adding category', error);
-      toast.error('Category already exists for this restaurant');
+      toast.error(error.response.data.message);
     }
   };
 
@@ -111,13 +115,12 @@ function FoodCategory() {
 
     setValidationError('');
     try {
-      await axios.put(`http://localhost:8082/category/update/${editingCategory.id}`, newCategory);
+      const response = await axios.put(`http://localhost:8082/category/update/${editingCategory.id}`, newCategory);
+      toast.success(response.data.message);
       fetchCategories(newCategory.restaurantId);
       setShowEditForm(false);
-      toast.success('Category updated successfully!');
     } catch (error) {
-      console.error('Error updating category', error);
-      toast.error('Category already exists for this restaurant');
+      toast.error(error.response.data.message);
     }
   };
 
@@ -143,7 +146,7 @@ function FoodCategory() {
                 <option value="">Select Restaurant</option>
                 {restaurants.map((restaurant) => (
                   <option key={restaurant.id} value={restaurant.id}>
-                    {restaurant.restaurantName} {/* Updated field name */}
+                    {restaurant.restaurantName}
                   </option>
                 ))}
               </select>
@@ -177,7 +180,7 @@ function FoodCategory() {
                 <option value="">Select Restaurant</option>
                 {restaurants.map((restaurant) => (
                   <option key={restaurant.id} value={restaurant.id}>
-                    {restaurant.restaurantName} {/* Updated field name */}
+                    {restaurant.restaurantName}
                   </option>
                 ))}
               </select>
@@ -199,6 +202,20 @@ function FoodCategory() {
           </div>
         )}
     
+        <div className="restaurant-filter">
+          <select
+            value={selectedRestaurantId}
+            onChange={handleRestaurantChange}
+          >
+            <option value="">Select Restaurant</option>
+            {restaurants.map((restaurant) => (
+              <option key={restaurant.id} value={restaurant.id}>
+                {restaurant.restaurantName}
+              </option>
+            ))}
+          </select>
+        </div>
+    
         <table className="category-table">
           <thead>
             <tr>
@@ -210,7 +227,7 @@ function FoodCategory() {
           <tbody>
             {categories.map((category) => (
               <tr key={category.id}>
-                <td>{restaurants.find(r => r.id === category.restaurantId)?.restaurantName}</td> {/* Updated field name */}
+                <td>{restaurants.find(r => r.id === category.restaurantId)?.restaurantName}</td>
                 <td>{category.categoryName}</td>
                 <td>
                   <button className="edit-icon-button" onClick={() => handleEditCategory(category)}>

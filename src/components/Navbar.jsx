@@ -11,14 +11,12 @@ const Navbar = ({ toggleSidebar }) => {
 
   const handleUserIconClick = () => {
     if (user) {
-      // Check if user is a customer or restaurant owner and navigate accordingly
       if (user.userRole === 'CUSTOMER') {
         navigate('/customer-dashboard');
-      } else if (user.userRole === 'OWNER') {
+      } else if (user.userRole === 'RESTAURANT_OWNER') {
         navigate('/restaurant-dashboard');
       }
     } else {
-      // If no user is logged in, navigate to login page
       navigate('/login');
     }
   };
@@ -29,10 +27,11 @@ const Navbar = ({ toggleSidebar }) => {
         <img src={iconImg} alt="Icon" className="logo-icon" />
         <h1 className="logo">FoodHub</h1>
       </div>
-      <nav className="nav-links">
+
+        <nav className="nav-links">
         <a href="/">Home</a>
-        <a href="/">Contact Us</a>
-      </nav>
+        <a href="/contact-us">Contact Us</a>
+            </nav>
       <div className="icons">
         {user ? (
           <div className="user-menu" onClick={handleUserIconClick}>
@@ -42,7 +41,6 @@ const Navbar = ({ toggleSidebar }) => {
         ) : (
           <button className="login-button" onClick={() => navigate('/login')}>Login</button>
         )}
-        {/* {(user === null || user.userRole === 'CUSTOMER') && <FaShoppingCart className="icon" />} */}
         {(user === null || user.userRole === 'CUSTOMER') }
       </div>
     </header>

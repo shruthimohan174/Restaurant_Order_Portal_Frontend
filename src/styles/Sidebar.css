@@ -5,8 +5,8 @@
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     position: fixed;
-    top: 98px;/* Adjust based on your navbar height */
-    bottom: 0;
+    top: 98px;
+        bottom: 0;
     transition: left 0.3s ease-in-out;
     z-index: 1000;
   }
@@ -40,10 +40,9 @@
     margin-right: 10px;
   }
   
-  /* Add this to your global styles or App.css */
   .app-containerS {
     display: flex;
-    min-height: calc(100vh - 60px); /* Adjust based on your navbar height */
+    min-height: calc(100vh - 60px); 
   }
   
   .shifted {

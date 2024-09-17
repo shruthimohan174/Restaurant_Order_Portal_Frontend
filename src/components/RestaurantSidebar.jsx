@@ -6,7 +6,7 @@ import '../styles/Sidebar.css';
 
 function RestaurantSidebar({ sidebarOpen }) {
   const navigate = useNavigate();
-  const { logout, user } = useUser(); // Get the user from context
+  const { logout, user } = useUser(); 
 
   const handleLogout = () => {
     logout();

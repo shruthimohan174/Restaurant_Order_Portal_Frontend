@@ -97,24 +97,18 @@ const FoodItem = () => {
     let isValid = true;
     let newErrors = {};
 
-    // Validate itemName
     if (!newFoodItem.itemName.trim()) {
       newErrors.itemName = 'Item name is required.';
       isValid = false;
     } else if (!/^[A-Za-z\s]+$/.test(newFoodItem.itemName)) {
       newErrors.itemName = 'Item name must contain only alphabets.';
       isValid = false;
-    } else if (existingItemNames.includes(newFoodItem.itemName.toLowerCase())) {
-      newErrors.itemName = 'An item with this name already exists in this restaurant.';
-      isValid = false;
-    }
-    // Validate price
+    } 
     if (!newFoodItem.price.trim() || isNaN(newFoodItem.price) || Number(newFoodItem.price) <= 0) {
       newErrors.price = 'Valid price is required. It should contain only numbers.';
       isValid = false;
     }
 
-    // Validate description
     if (!newFoodItem.description.trim()) {
       newErrors.description = 'Description is required.';
       isValid = false;
@@ -123,13 +117,11 @@ const FoodItem = () => {
       isValid = false;
     }
 
-    // Validate isVeg
     if (newFoodItem.isVeg !== 'Yes' && newFoodItem.isVeg !== 'No') {
       newErrors.isVeg = 'Please select if the item is vegetarian or not.';
       isValid = false;
     }
 
-    // Validate image
     if (newFoodItem.image && !newFoodItem.image.type.startsWith('image/')) {
       newErrors.image = 'File must be an image.';
       isValid = false;
@@ -158,12 +150,12 @@ const FoodItem = () => {
     }
 
     try {
-      await axios.post('http://localhost:8082/foodItem/food/add', formData, {
+     const response= await axios.post('http://localhost:8082/foodItem', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      toast.success('New food item added successfully!');
+      toast.success(response.data.message);
       fetchFoodItems(selectedRestaurant);
       setNewFoodItem({
         itemName: '',
@@ -177,7 +169,8 @@ const FoodItem = () => {
       setErrors({});
       closeModal();
     } catch (error) {
-      toast.error('Food item already exists');
+      toast.error(error.response.data.message);
+
     }
   };
 
@@ -193,30 +186,41 @@ const FoodItem = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-
-    if (existingItemNames.filter(name => name !== editFoodItem.itemName.toLowerCase()).includes(editFoodItem.itemName.toLowerCase())) {
-      setErrors(prev => ({...prev, itemName: 'An item with this name already exists in this restaurant.'}));
-      return;
-    }
+  
     try {
-      const response = await axios.put(`http://localhost:8082/foodItem/update/${editFoodItem.id}`, {
-        itemName: editFoodItem.itemName,
-        description: editFoodItem.description,
-        price: editFoodItem.price
+      const formData = new FormData();
+      formData.append('itemName', editFoodItem.itemName);
+      formData.append('price', editFoodItem.price);
+      formData.append('description', editFoodItem.description);
+      formData.append('isVeg', editFoodItem.isVeg); 
+  
+      if (editFoodItem.image) {
+        formData.append('image', editFoodItem.image);
+      }
+  
+      const response = await axios.put(`http://localhost:8082/foodItem/update/${editFoodItem.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-
+  
       if (response.status === 200) {
-        toast.success('Food item updated successfully!');
+        toast.success(response.data.message);
         fetchFoodItems(selectedRestaurant);
         setEditModalOpen(false);
         setEditFoodItem(null);
       } else {
-        toast.error('Failed to update food item');
+        toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error('Food item already exists for this restaurant');
+      toast.error('Failed to update food item');
     }
   };
+
+const handleEditImageChange = (e) => {
+    setEditFoodItem(prev => ({ ...prev, image: e.target.files[0] }));
+};
+
 
   const handleRestaurantChange = (e) => {
     const { value } = e.target;
@@ -246,7 +250,6 @@ const FoodItem = () => {
           </button>
         </h2>
 
-        {/* Dropdown for selecting restaurant */}
         <div className="restaurant-selector">
           <h3>Select Restaurant</h3>
           <select
@@ -262,7 +265,6 @@ const FoodItem = () => {
           </select>
         </div>
 
-        {/* Display food items */}
         <div className="food-item-list">
           {foodItems.map(foodItem => (
             <div key={foodItem.id} className="food-item-card">
@@ -286,7 +288,9 @@ const FoodItem = () => {
           ))}
         </div>
 
-        {/* Modal for adding food items */}
+        </div>
+        <div className="add-editF">
+
         <div className={`modalFI ${modalOpen ? 'show' : ''}`} style={{ display: modalOpen ? 'block' : 'none' }}>
           <div className="modal-contentFI">
             <span className="close-btn" onClick={closeModal}>&times;</span>
@@ -374,7 +378,6 @@ const FoodItem = () => {
           </div>
         </div>
 
-        {/* Modal for editing food items */}
         {editFoodItem && (
           <div className={`modalFI ${editModalOpen ? 'show' : ''}`} style={{ display: editModalOpen ? 'block' : 'none' }}>
             <div className="modal-contentFI">
@@ -406,9 +409,29 @@ const FoodItem = () => {
                   placeholder="Description"
                   required
                 />
-
-                <button type="submit">Update Food Item</button>
-              </form>
+              <div>
+                  <label htmlFor="isVeg">Vegetarian:</label>
+                  <select
+                    id="isVeg"
+                    name="isVeg"
+                    value={editFoodItem.isVeg}
+                    onChange={handleEditInputChange}
+                  >
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                  {errors.isVeg && <p className="error">{errors.isVeg}</p>}
+                </div>
+              <label htmlFor="image">Food Item Image:</label>
+                  <input
+                      type="file"
+                      id="image"
+                      name="image"
+                      accept="image/*"
+                      onChange={handleEditImageChange}
+                  />
+                  <button type="submit">Update Food Item</button>
+                  </form>
             </div>
           </div>
         )}

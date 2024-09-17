@@ -36,7 +36,6 @@ function CustomerDashboard({ sidebarOpen, toggleSidebar }) {
       </div>
       <div className={`dashboard-content ${sidebarOpen ? 'shifted' : ''}`}>
         <h1 className="welcome-heading">Welcome to your dashboard!</h1>
-        {/* Add more dashboard content here */}
       </div>
     </div>
   );

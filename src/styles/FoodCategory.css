@@ -2,13 +2,18 @@
   padding: 20px;
   margin-left: 291px;
 }
+.food-category-content{
+  margin-left:300px;
+}
 
 h2 {
   margin-bottom: 20px;
 }
 
+
+
 .category-table {
-  width: 100%;
+  width: 80%;
   border-collapse: collapse;
   margin-top: 20px;
 }
@@ -30,7 +35,7 @@ h2 {
   color: #007bff;
 }
 
-.add-category-button, .submit-category-button, .cancel-button {
+ .submit-category-button, .cancel-button {
   padding: 10px;
   border: none;
   border-radius: 5px;
@@ -42,14 +47,27 @@ h2 {
 
 .add-category-button {
   background-color: #28a745;
+  margin-bottom: 30px;
+  margin-left: 800px;
 }
 
+.add-category-button:hover {
+  background-color: #0c4119;
+}
 .submit-category-button {
-  background-color: #007bff;
-}
+  background-color: #28a745;
+  margin-top: 23px;
+  margin-left: 23px;
 
+}
+.submit-category-button:hover {
+  background-color: #0c4119;
+}
 .cancel-button {
   background-color: #dc3545;
+  margin-top: -40px;
+  margin-left: 215px;
+
 }
 
 .form-container {
@@ -70,8 +88,17 @@ h2 {
   border-radius: 5px;
   width: 400px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 29px;
 }
 .validation-error {
   color: red;
   margin-top: 10px;
+}
+
+.h3{
+  font-size:22px;
+}
+.restaurant-filter{
+  margin-top:-55px;
+  size: 30px;
 }

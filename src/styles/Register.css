@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
   background-color: #f5f5f5;
 }
 
@@ -13,38 +13,38 @@
   text-align: center;
   width: 100%;
   max-width: 500px;
-  padding: 15px; /* Reduced padding */
+  padding: 15px;
   box-sizing: border-box;
   margin-bottom: 100px;
 }
 
 .titleR {
   margin-bottom: 15px;
-  font-size: 26px; /* Smaller title */
+  font-size: 26px;
   color: #333;
 }
 
 .input,
 .select {
-  width: 90%; /* Full width input */
-  padding: 10px; /* Reduced padding */
-  margin: 8px 0; /* Reduced margin */
-  font-size: 14px; /* Smaller font size */
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
+  font-size: 14px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
 .register-button {
-  width: 100%; /* Full width button */
-  padding: 10px; /* Reduced padding */
-  font-size: 16px; /* Smaller font size */
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
   font-weight: bold;
   color: white;
   background-color: red;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px; /* Reduced margin */
+  margin-top: 10px;
   transition: background-color 0.3s;
 }
 
@@ -53,8 +53,8 @@
 }
 
 .already-have-account {
-  margin-top: 15px; /* Reduced margin */
-  font-size: 16px; /* Smaller font size */
+  margin-top: 15px;
+  font-size: 16px;
   color: #333;
 }
 
@@ -65,14 +65,15 @@
 
 .error {
   color: red;
-  font-size: 15px; /* Adjust as needed */
-  margin: 0px 0; /* Margin to separate from other elements */
+  font-size: 15px;
+  margin: 0px 0;
 }
+
 .error-message {
   color: red;
-  font-size: 0.875rem; /* Slightly smaller font size */
-  margin-top: -5px; /* Space between the input and error message */
-  margin-bottom: 10px; /* Space between the error message and next input */
+  font-size: 0.875rem;
+  margin-top: -5px;
+  margin-bottom: 10px;
 }
 
 .modal {
@@ -89,23 +90,23 @@
 
 .modal-content {
   background: white;
-  padding: 30px; /* Reduced padding */
+  padding: 30px;
   border-radius: 15px;
   text-align: center;
   max-width: 90%;
-  width: 400px; /* Adjusted width */
+  width: 400px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.5s ease-in-out;
 }
 
 .modal-content h2 {
-  margin-bottom: 15px; /* Reduced margin */
-  font-size: 24px; /* Smaller font size */
+  margin-bottom: 15px;
+  font-size: 24px;
   color: green;
 }
 
 .modal-content p {
-  font-size: 16px; /* Smaller font size */
+  font-size: 16px;
   margin-bottom: 10px;
   color: #333;
 }
@@ -121,51 +122,50 @@
   }
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
   .titleR {
-    font-size: 20px; /* Smaller title */
+    font-size: 20px;
   }
 
   .input,
   .select,
   .register-button {
-    font-size: 14px; /* Smaller font size */
+    font-size: 14px;
   }
 
   .modal-content {
-    padding: 20px; /* Reduced padding */
+    padding: 20px;
   }
 
   .modal-content h2 {
-    font-size: 20px; /* Smaller font size */
+    font-size: 20px;
   }
 
   .modal-content p {
-    font-size: 14px; /* Smaller font size */
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
   .titleR {
-    font-size: 18px; /* Smaller title */
+    font-size: 18px;
   }
 
   .input,
   .select,
   .register-button {
-    font-size: 12px; /* Smaller font size */
+    font-size: 12px;
   }
 
   .modal-content {
-    padding: 15px; /* Reduced padding */
+    padding: 15px;
   }
 
   .modal-content h2 {
-    font-size: 18px; /* Smaller font size */
+    font-size: 18px;
   }
 
   .modal-content p {
-    font-size: 12px; /* Smaller font size */
+    font-size: 12px;
   }
 }

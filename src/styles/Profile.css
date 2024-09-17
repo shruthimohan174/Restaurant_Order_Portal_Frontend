@@ -58,7 +58,6 @@
   margin-top: -200pxx;
 }
 
-/* Modal Styles */
 .modalP {
   position: fixed;
   top: 0;
@@ -80,7 +79,6 @@
   width: 100%;
 }
 
-/* Edit Profile Form Styles */
 .edit-profile-container {
   padding: 20px;
   background-color: white;
@@ -106,8 +104,6 @@
   flex-direction: column;
   gap: 5px;
 }
-/* .form-field label {
-} */
 
 
 .error-message {
@@ -122,7 +118,6 @@
   margin-top: 20px;
 }
 
-/* Button Styles */
 .submit-button,
 .cancel-button{
   padding: 10px 15px;
@@ -135,18 +130,27 @@
   gap: 5px;
 }
 
-.submit-button {
+.submit-buttonP {
   background-color: #28a745;
   color: white;
 }
 
-.cancel-button {
+.cancel-buttonP {
   background-color: #dc3545;
   color: white;
 }
 
 .edit-button {
-  background-color: #007bff;
+  background-color: #28a745;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #0c4119;
+  color: white;
+}
+.submit-buttonP:hover {
+  background-color: #0c4119;
   color: white;
 }
 .success-message {

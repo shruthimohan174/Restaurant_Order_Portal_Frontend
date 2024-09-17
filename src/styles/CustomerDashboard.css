@@ -1,8 +1,7 @@
-/* styles/CustomerDashboard.css */
 
 .dashboard-container {
   display: flex;
-  height: calc(100vh - 60px); /* Adjust based on your navbar height */
+  height: calc(100vh - 60px); 
 }
 
 .sidebar {
@@ -11,10 +10,9 @@
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   position: fixed;
-  left: 0; /* Sidebar is always visible */
-  top: 60px; /* Adjust based on your navbar height */
+  left: 0; 
+  top: 60px; 
   bottom: 0;
-  /* Remove transition */
 }
 
 .sidebar-item {
@@ -37,7 +35,7 @@
 .dashboard-content {
   flex-grow: 1;
   padding: 20px;
-  margin-left: 250px; /* Space for the sidebar */
+  margin-left: 250px; 
 }
 
 .dashboard-header {
