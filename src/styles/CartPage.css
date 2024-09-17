@@ -1,0 +1,15 @@
+.place{
+    background-color: #28a745;
+  }
+
+  .place:hover{
+    background-color: #0c4119;
+
+  }
+  .total-price {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 10px;
+    color: #333; 
+  }
+  

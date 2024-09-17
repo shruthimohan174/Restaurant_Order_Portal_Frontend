@@ -1,0 +1,21 @@
+.order-history-page {
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 250px;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    margin-left:400px;
+  }
+  .heading{
+    margin-left:23px;
+  }
+  .sidebar.open + .main-content {
+    margin-left: 250px;
+  }
+  
