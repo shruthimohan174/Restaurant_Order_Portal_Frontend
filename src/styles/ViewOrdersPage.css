@@ -1,0 +1,8 @@
+
+   .completed{
+    background-color: #28a745;
+   }
+
+  .completed:hover{
+    background-color: #0c4119;
+  }
