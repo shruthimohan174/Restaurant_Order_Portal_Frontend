@@ -1,0 +1,104 @@
+.food-category-page {
+  padding: 20px;
+  margin-left: 291px;
+}
+.food-category-content{
+  margin-left:300px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+
+
+.category-table {
+  width: 80%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.category-table th, .category-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.category-table th {
+  background-color: #f4f4f4;
+}
+
+.edit-icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+}
+
+ .submit-category-button, .cancel-button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left:400px;
+}
+
+.add-category-button {
+  background-color: #28a745;
+  margin-bottom: 30px;
+  margin-left: 800px;
+}
+
+.add-category-button:hover {
+  background-color: #0c4119;
+}
+.submit-category-button {
+  background-color: #28a745;
+  margin-top: 23px;
+  margin-left: 23px;
+
+}
+.submit-category-button:hover {
+  background-color: #0c4119;
+}
+.cancel-button {
+  background-color: #dc3545;
+  margin-top: -40px;
+  margin-left: 215px;
+
+}
+
+.form-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-category-form, .edit-category-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 400px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 29px;
+}
+.validation-error {
+  color: red;
+  margin-top: 10px;
+}
+
+.h3{
+  font-size:22px;
+}
+.restaurant-filter{
+  margin-top:-55px;
+  size: 30px;
+}
